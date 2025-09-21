@@ -2,139 +2,80 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmación de Pago - Aurora Financiera</title>
+  <title>Formulario AuroraFinanciera</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f9f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    header {
-      background-color: #003366;
-      color: white;
+    form {
+      background: #fff;
       padding: 20px;
-      text-align: center;
-    }
-    main {
-      padding: 20px;
-    }
-    h2 {
-      color: #003366;
-    }
-    .wallets {
-      background: #e6f2ff;
-      border: 1px solid #b3d1ff;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input, select {
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      max-width: 400px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
     button {
-      margin-top: 20px;
-      background-color: #28a745;
-      color: white;
+      background: #28a745;
+      color: #fff;
+      padding: 10px;
       border: none;
-      padding: 15px;
-      width: 100%;
       border-radius: 5px;
-      font-size: 16px;
       cursor: pointer;
+      width: 100%;
     }
     button:hover {
-      background-color: #218838;
-    }
-    .note {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #555;
-      background: #fff3cd;
-      border: 1px solid #ffeeba;
-      padding: 10px;
-      border-radius: 5px;
+      background: #218838;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Aurora Financiera</h1>
-    <p>Confirmación de Pago</p>
-  </header>
-  <main>
-    <section class="wallets">
-      <h2>Billeteras Oficiales</h2>
-      <p><strong>USDT BEP20:</strong> 0x5C297BE994afAdC2f78bF43A23583b71e4348631</p>
-      <p><strong>USDT TRC20:</strong> TJNWs4vopJgaam7qA2sjGYicvpaQrCK9fo</p>
-    </section>
-
-    <h2>Pasos Clave</h2>
-    <ol>
-      <li>Realiza tu pago a cualquiera de las billeteras oficiales indicadas arriba.</li>
-      <li>Después de realizado el pago, realiza una <strong>captura de pantalla</strong> donde se vean los siguientes datos: <br>hora, dirección a la que transferiste y monto, para que tu pago sea válido.</li>
-      <li>Llena el formulario de confirmación de pago.</li>
-    </ol>
-
-    <form id="paymentForm">
-      <label for="nombre">Nombre completo:</label>
-      <input type="text" id="nombre" name="nombre" required>
-
-      <label for="wallet">Wallet a la que transferiste:</label>
-      <select id="wallet" name="wallet" required>
-        <option value="">Seleccione...</option>
-        <option value="bep20">USDT BEP20</option>
-        <option value="trc20">USDT TRC20</option>
-      </select>
-
-      <label for="txid">Dirección de tu billetera (desde donde hiciste la transferencia):</label>
-      <input type="text" id="txid" name="txid" required>
-
-      <label for="monto">Monto (mínimo 13 USDT):</label>
-      <input type="number" id="monto" name="monto" min="13" required>
-
-      <label for="telefono">Número de teléfono (con + y código de país):</label>
-      <input type="tel" id="telefono" name="telefono" pattern="^\+[1-9]\d{1,14}$" placeholder="+53XXXXXXXX" required>
-
-      <button type="submit">Confirmar Pago</button>
-    </form>
-
-    <div class="note">
-      <p><strong>Nota importante:</strong> Tu retiro puedes hacerlo en cualquier momento. Para solicitarlo, dirígete al mismo chat de los administradores en WhatsApp.</p>
-    </div>
-  </main>
+  <form id="dataForm">
+    <h2>Formulario AuroraFinanciera</h2>
+    
+    <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
+    <input type="text" id="wallet" name="wallet" placeholder="Wallet" required>
+    <input type="text" id="txid" name="txid" placeholder="TxID" required>
+    <input type="number" id="monto" name="monto" placeholder="Monto" required>
+    <input type="text" id="telefono" name="telefono" placeholder="Teléfono" required>
+    
+    <button type="submit">Enviar</button>
+  </form>
 
   <script>
-    document.getElementById("paymentForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+    document.getElementById("dataForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const data = {
+        nombre: document.getElementById("nombre").value,
+        wallet: document.getElementById("wallet").value,
+        txid: document.getElementById("txid").value,
+        monto: document.getElementById("monto").value,
+        telefono: document.getElementById("telefono").value
+      };
 
-      const nombre = document.getElementById("nombre").value;
-      const wallet = document.getElementById("wallet").value;
-      const txid = document.getElementById("txid").value;
-      const monto = document.getElementById("monto").value;
-      const telefono = document.getElementById("telefono").value;
-
-      if(nombre && wallet && txid && monto >= 13 && telefono.match(/^\+[1-9]\d{1,14}$/)) {
-        fetch("https://script.google.com/macros/s/AKfycbwkTdFoQorjtQTJ4eSUVWnnW9CYvjNf-fP0tfADGSfm4knojb38_S5QPD8ogn1kTL_L/exec", {
-          method: "POST",
-          body: JSON.stringify({ nombre, wallet, txid, monto, telefono }),
-          headers: { "Content-Type": "application/json" }
-        }).then(() => {
-          window.location.href = "https://wa.me/message/4O7MX6CORIEMK1";
-        });
-      } else {
-        alert("Por favor, complete todos los campos correctamente.");
-      }
+      fetch("https://script.google.com/macros/s/AKfycbz6ebojv6ghuS_Il2YEPvqovLze6HjJz6pXsFrGLJyDRolfleF-mE4OLgz_OqgVizUu/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(() => {
+        // Redirige a WhatsApp automáticamente
+        window.location.href = "https://wa.me/message/4O7MX6CORIEMK1";
+      })
+      .catch(err => alert("Error al enviar los datos: " + err));
     });
   </script>
 </body>
