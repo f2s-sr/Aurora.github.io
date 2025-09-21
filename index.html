@@ -112,32 +112,26 @@
   </main>
 
   <script>
-    document.getElementById("paymentForm").addEventListener("submit", async function(event) {
+    document.getElementById("paymentForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      
       const wallet = document.getElementById("wallet").value;
       const txid = document.getElementById("txid").value;
       const monto = document.getElementById("monto").value;
       const telefono = document.getElementById("telefono").value;
 
       if(wallet && txid && monto >= 13 && telefono.match(/^\+[1-9]\d{1,14}$/)) {
-        try {
-          await fetch("https://script.google.com/macros/s/AKfycbyQ4wgFAT3X9pq2oQvhlQKcFs_g6mOyc3TwB8kIxFttDYzJ_f55EaAeq9TPUvrsga78/exec", {
-            method: "POST",
-            body: JSON.stringify({wallet, txid, monto, telefono}),
-            headers: {
-              "Content-Type": "application/json"
-            }
-          });
-
-          // Redirige a WhatsApp después de guardar
+        fetch("https://script.google.com/macros/s/AKfycbwkTdFoQorjtQTJ4eSUVWnnW9CYvjNf-fP0tfADGSfm4knojb38_S5QPD8ogn1kTL_L/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ wallet, txid, monto, telefono })
+        }).then(() => {
           setTimeout(() => {
             window.location.href = "https://wa.me/message/4O7MX6CORIEMK1";
           }, 500);
-
-        } catch (error) {
-          alert("Hubo un error al guardar los datos. Intente nuevamente.");
-        }
+        });
       } else {
         alert("Por favor, complete todos los campos correctamente.");
       }
