@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Pago - Aurora Financiera</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #003366;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+    }
+    h2 {
+      color: #003366;
+    }
+    .wallets {
+      background: #e6f2ff;
+      border: 1px solid #b3d1ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 15px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Aurora Financiera</h1>
+    <p>Confirmación de Pago</p>
+  </header>
+  <main>
+    <section class="wallets">
+      <h2>Billeteras Oficiales</h2>
+      <p><strong>USDT BEP20:</strong> 0x5C297BE994afAdC2f78bF43A23583b71e4348631</p>
+      <p><strong>USDT TRC20:</strong> TJNWs4vopJgaam7qA2sjGYicvpaQrCK9fo</p>
+    </section>
+
+    <h2>Pasos Clave</h2>
+    <ol>
+      <li>Realiza tu pago a cualquiera de las billeteras oficiales indicadas arriba.</li>
+      <li>Después de realizado el pago, realiza una <strong>captura de pantalla</strong> donde se vean los siguientes datos: <br>hora, dirección a la que transferiste y monto, para que tu pago sea válido.</li>
+      <li>Llena el formulario de confirmación de pago.</li>
+    </ol>
+
+    <form id="paymentForm">
+      <label for="wallet">Wallet a la que transferiste:</label>
+      <select id="wallet" name="wallet" required>
+        <option value="">Seleccione...</option>
+        <option value="bep20">USDT BEP20</option>
+        <option value="trc20">USDT TRC20</option>
+      </select>
+
+      <label for="txid">Dirección de tu billetera (desde donde hiciste la transferencia):</label>
+      <input type="text" id="txid" name="txid" required>
+
+      <label for="monto">Monto (mínimo 13 USDT):</label>
+      <input type="number" id="monto" name="monto" min="13" required>
+
+      <label for="telefono">Número de teléfono (con + y código de país):</label>
+      <input type="tel" id="telefono" name="telefono" pattern="^\+[1-9]\d{1,14}$" placeholder="+53XXXXXXXX" required>
+
+      <button type="submit">Confirmar Pago</button>
+    </form>
+
+    <div class="note">
+      <p><strong>Nota importante:</strong> Tu retiro puedes hacerlo en cualquier momento. Para solicitarlo, dirígete al mismo chat de los administradores en WhatsApp.</p>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById("paymentForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      
+      const wallet = document.getElementById("wallet").value;
+      const txid = document.getElementById("txid").value;
+      const monto = document.getElementById("monto").value;
+      const telefono = document.getElementById("telefono").value;
+
+      if(wallet && txid && monto >= 13 && telefono.match(/^\+[1-9]\d{1,14}$/)) {
+        try {
+          await fetch("https://script.google.com/macros/s/AKfycbyQ4wgFAT3X9pq2oQvhlQKcFs_g6mOyc3TwB8kIxFttDYzJ_f55EaAeq9TPUvrsga78/exec", {
+            method: "POST",
+            body: JSON.stringify({wallet, txid, monto, telefono}),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+
+          // Redirige a WhatsApp después de guardar
+          setTimeout(() => {
+            window.location.href = "https://wa.me/message/4O7MX6CORIEMK1";
+          }, 500);
+
+        } catch (error) {
+          alert("Hubo un error al guardar los datos. Intente nuevamente.");
+        }
+      } else {
+        alert("Por favor, complete todos los campos correctamente.");
+      }
+    });
+  </script>
+</body>
+</html>
